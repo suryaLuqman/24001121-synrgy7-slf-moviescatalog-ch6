@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.ui
+package com.slf.moviescatalog.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

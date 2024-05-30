@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.fragments
+package com.slf.moviescatalog.presentation.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

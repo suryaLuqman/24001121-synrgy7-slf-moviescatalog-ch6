@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.fragments
+package com.slf.moviescatalog.presentation.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.slf.moviescatalog.R
 import com.slf.moviescatalog.databinding.FragmentRegisterBinding
-import com.slf.moviescatalog.model.User
-import com.slf.moviescatalog.model.UserRepository
+import com.slf.moviescatalog.data.model.User
+import com.slf.moviescatalog.data.model.UserRepository
 import com.slf.moviescatalog.utils.DatePickerFragment
 import com.slf.moviescatalog.utils.Validation
 import kotlinx.android.synthetic.main.fragment_register.*

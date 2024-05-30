@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.slf.moviescatalog.fragments.LoginFragment"
+        android:name="com.slf.moviescatalog.presentation.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.slf.moviescatalog.fragments.RegisterFragment"
+        android:name="com.slf.moviescatalog.presentation.fragments.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment2"
-        android:name="com.slf.moviescatalog.fragments.EditProfileFragment"
+        android:name="com.slf.moviescatalog.presentation.fragments.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" >
         <action

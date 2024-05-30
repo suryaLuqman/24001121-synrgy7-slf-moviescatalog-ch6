@@ -1,4 +1,4 @@
-package com.slf.moviescatalog
+package com.slf.moviescatalog.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.slf.moviescatalog.R
+import com.slf.moviescatalog.data.model.Movie
 
 class MoviesAdapter(
     private var movies: MutableList<Movie>,
@@ -14,8 +16,7 @@ class MoviesAdapter(
 ) : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_movie, parent, false)
         return MovieViewHolder(view)
     }

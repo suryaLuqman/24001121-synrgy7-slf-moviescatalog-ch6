@@ -1,7 +1,7 @@
 package com.slf.moviescatalog.data
 
 import android.annotation.SuppressLint
-import com.slf.moviescatalog.GetMoviesResponse
+import com.slf.moviescatalog.data.model.GetMoviesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,6 +1,7 @@
-package com.slf.moviescatalog
+package com.slf.moviescatalog.data
 
-import com.slf.moviescatalog.data.Api
+import com.slf.moviescatalog.data.model.GetMoviesResponse
+import com.slf.moviescatalog.data.model.Movie
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

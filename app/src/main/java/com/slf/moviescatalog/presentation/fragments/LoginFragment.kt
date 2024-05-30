@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.fragments
+package com.slf.moviescatalog.presentation.fragments
 
 import android.content.Intent
 import android.graphics.Color
@@ -17,8 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.slf.moviescatalog.R
 import com.slf.moviescatalog.databinding.FragmentLoginBinding
-import com.slf.moviescatalog.model.UserRepository
-import com.slf.moviescatalog.ui.MainActivity
+import com.slf.moviescatalog.data.model.UserRepository
+import com.slf.moviescatalog.presentation.ui.MainActivity
 import com.slf.moviescatalog.utils.Constant
 import com.slf.moviescatalog.utils.SharedHelper
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -117,7 +117,7 @@ class LoginFragment : Fragment() {
         super.onStart()
         if (shared.getBoolean(Constant.LOGIN, false)){
             activity?.let {
-                val intent = Intent(it,MainActivity::class.java)
+                val intent = Intent(it, MainActivity::class.java)
                 it.startActivity(intent)}
         }
     }

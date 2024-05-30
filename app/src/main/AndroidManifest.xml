@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Challenge5">
         <activity
-            android:name="com.slf.moviescatalog.ui.UserProfileActivity"
+            android:name="com.slf.moviescatalog.presentation.ui.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name="com.slf.moviescatalog.ui.LoginActivity"
+            android:name="com.slf.moviescatalog.presentation.ui.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.slf.moviescatalog.ui.MovieDetailsActivity" />
-        <activity android:name="com.slf.moviescatalog.ui.MainActivity"
+        <activity android:name="com.slf.moviescatalog.presentation.ui.MovieDetailsActivity" />
+        <activity android:name="com.slf.moviescatalog.presentation.ui.MainActivity"
             android:exported="false" >
 
         </activity>

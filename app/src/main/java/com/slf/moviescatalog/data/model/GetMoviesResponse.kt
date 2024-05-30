@@ -1,4 +1,4 @@
-package com.slf.moviescatalog
+package com.slf.moviescatalog.data.model
 
 import com.google.gson.annotations.SerializedName
 

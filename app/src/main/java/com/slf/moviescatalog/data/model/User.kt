@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.model
+package com.slf.moviescatalog.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

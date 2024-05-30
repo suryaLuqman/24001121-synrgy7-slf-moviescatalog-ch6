@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     android:gravity="center"
-    tools:context=".fragments.RegisterFragment">
+    tools:context=".presentation.fragments.RegisterFragment">
 
     <ScrollView
         android:layout_width="match_parent"

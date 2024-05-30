@@ -1,8 +1,8 @@
-package com.slf.moviescatalog.ViewModel
+package com.slf.moviescatalog.presentation.ViewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.slf.moviescatalog.model.User
+import com.slf.moviescatalog.data.model.User
 
 class UserViewModel : ViewModel() {
 

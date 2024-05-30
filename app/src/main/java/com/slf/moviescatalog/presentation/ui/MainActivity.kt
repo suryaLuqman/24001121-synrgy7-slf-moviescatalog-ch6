@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.ui
+package com.slf.moviescatalog.presentation.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,9 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.slf.moviescatalog.*
-import com.slf.moviescatalog.ViewModel.UserViewModel
+import com.slf.moviescatalog.presentation.ViewModel.UserViewModel
+import com.slf.moviescatalog.data.MoviesRepository
 import com.slf.moviescatalog.databinding.ActivityMainBinding
-import com.slf.moviescatalog.model.UserRepository
+import com.slf.moviescatalog.data.model.Movie
+import com.slf.moviescatalog.data.model.UserRepository
+import com.slf.moviescatalog.presentation.adapter.MoviesAdapter
 import com.slf.moviescatalog.utils.Constant
 import com.slf.moviescatalog.utils.SharedHelper
 import kotlinx.android.synthetic.main.activity_main.*

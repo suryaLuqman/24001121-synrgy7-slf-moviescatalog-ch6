@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/back"
 
-    tools:context=".fragments.EditProfileFragment">
+    tools:context=".presentation.fragments.EditProfileFragment">
 
     <ImageButton
         android:id="@+id/photoedit"

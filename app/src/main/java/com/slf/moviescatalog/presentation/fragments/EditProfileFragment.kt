@@ -1,4 +1,4 @@
-package com.slf.moviescatalog.fragments
+package com.slf.moviescatalog.presentation.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -21,17 +21,16 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.slf.moviescatalog.R
-import com.slf.moviescatalog.ViewModel.UserViewModel
+import com.slf.moviescatalog.presentation.ViewModel.UserViewModel
 import com.slf.moviescatalog.databinding.FragmentEditProfileBinding
-import com.slf.moviescatalog.model.User
-import com.slf.moviescatalog.model.UserRepository
-import com.slf.moviescatalog.ui.MainActivity
+import com.slf.moviescatalog.data.model.User
+import com.slf.moviescatalog.data.model.UserRepository
+import com.slf.moviescatalog.presentation.ui.MainActivity
 import com.slf.moviescatalog.utils.Constant
 import com.slf.moviescatalog.utils.SharedHelper
 import com.google.android.material.snackbar.Snackbar
 import com.slf.moviescatalog.utils.DatePickerFragment
 import com.slf.moviescatalog.utils.Validation
-import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

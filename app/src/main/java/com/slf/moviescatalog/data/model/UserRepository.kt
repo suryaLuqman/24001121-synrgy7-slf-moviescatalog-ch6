@@ -1,5 +1,5 @@
 // UserRepository.kt
-package com.slf.moviescatalog.model
+package com.slf.moviescatalog.data.model
 
 import android.content.Context
 import android.util.Log
