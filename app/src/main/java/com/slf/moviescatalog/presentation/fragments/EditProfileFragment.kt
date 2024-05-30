@@ -38,7 +38,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
-
 class EditProfileFragment : Fragment() {
     private var bind: FragmentEditProfileBinding? = null
     private val binding get() = bind!!
@@ -50,6 +49,7 @@ class EditProfileFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_IMAGE_PICKER = 2
+        private const val REQUEST_CODE_IMAGE_CAPTURE = 4
         private const val REQUEST_CODE_PERMISSION = 3
     }
 
@@ -77,58 +77,73 @@ class EditProfileFragment : Fragment() {
 
             photoedit.setOnClickListener {
                 if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
-                    openImagePicker()
+                    openImageSourceChooser()
                 } else {
-                    requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_PERMISSION)
+                    requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA), REQUEST_CODE_PERMISSION)
                 }
             }
         }
     }
 
-    private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_CODE_IMAGE_PICKER)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, 2)
+    private fun openImageSourceChooser() {
+        val options = arrayOf<CharSequence>("Take Photo", "Choose from Gallery", "Cancel")
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setTitle("Select Option")
+        builder.setItems(options) { dialog, item ->
+            when {
+                options[item] == "Take Photo" -> {
+                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(takePictureIntent, REQUEST_CODE_IMAGE_CAPTURE)
+                }
+                options[item] == "Choose from Gallery" -> {
+                    val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    startActivityForResult(pickPhotoIntent, REQUEST_CODE_IMAGE_PICKER)
+                }
+                options[item] == "Cancel" -> {
+                    dialog.dismiss()
+                }
             }
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        builder.show()
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_IMAGE_PICKER && resultCode == Activity.RESULT_OK && data != null) {
-            selectedImage = data.data
-            context?.let {
-                try {
-                    if (selectedImage != null) {
-                        // Salin gambar ke direktori internal
-                        val internalUri = copyImageToInternalStorage(selectedImage!!)
-                        if (internalUri != null) {
-                            selectedImage = internalUri
-                            selectedBitmap = if (Build.VERSION.SDK_INT >= 28) {
-                                val source = ImageDecoder.createSource(it.contentResolver, internalUri)
-                                ImageDecoder.decodeBitmap(source)
-                            } else {
-                                MediaStore.Images.Media.getBitmap(it.contentResolver, internalUri)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_IMAGE_PICKER -> {
+                    selectedImage = data?.data
+                    context?.let {
+                        try {
+                            selectedImage?.let { uri ->
+                                val internalUri = copyImageToInternalStorage(uri)
+                                if (internalUri != null) {
+                                    selectedImage = internalUri
+                                    selectedBitmap = if (Build.VERSION.SDK_INT >= 28) {
+                                        val source = ImageDecoder.createSource(it.contentResolver, internalUri)
+                                        ImageDecoder.decodeBitmap(source)
+                                    } else {
+                                        MediaStore.Images.Media.getBitmap(it.contentResolver, internalUri)
+                                    }
+                                    binding.photoedit.setImageBitmap(selectedBitmap)
+                                }
                             }
-                            binding.photoedit.setImageBitmap(selectedBitmap)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                }
+                REQUEST_CODE_IMAGE_CAPTURE -> {
+                    val imageBitmap = data?.extras?.get("data") as? Bitmap
+                    imageBitmap?.let {
+                        selectedBitmap = it
+                        binding.photoedit.setImageBitmap(it)
+                        // Save the image to internal storage
+                        selectedImage = saveImageToInternalStorage(it)
+                    }
                 }
             }
         }
@@ -149,20 +164,34 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri? {
+        return try {
+            val file = File(context?.filesDir, "profile_image.jpg")
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.close()
+            Uri.fromFile(file)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                openImageSourceChooser()
+            } else {
+                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         bind = null
-    }
-
-    private fun selectImage(it: View?) {
-        activity?.let {
-            if (ContextCompat.checkSelfPermission(it.applicationContext, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-            } else {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, 2)
-            }
-        }
     }
 
     private fun getDataProfile() {
