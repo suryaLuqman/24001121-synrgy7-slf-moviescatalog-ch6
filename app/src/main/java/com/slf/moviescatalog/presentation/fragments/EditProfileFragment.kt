@@ -23,6 +23,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.slf.moviescatalog.R
 import com.slf.moviescatalog.presentation.ViewModel.UserViewModel
 import com.slf.moviescatalog.databinding.FragmentEditProfileBinding
@@ -32,6 +37,7 @@ import com.slf.moviescatalog.presentation.ui.MainActivity
 import com.slf.moviescatalog.utils.Constant
 import com.slf.moviescatalog.utils.SharedHelper
 import com.google.android.material.snackbar.Snackbar
+import com.slf.moviescatalog.presentation.worker.BlurWorker
 import com.slf.moviescatalog.utils.DatePickerFragment
 import com.slf.moviescatalog.utils.Validation
 import kotlinx.coroutines.Dispatchers
@@ -124,6 +130,35 @@ class EditProfileFragment : Fragment() {
         intent.type = "image/*"
         startActivityForResult(intent, SELECT_PICTURE)
     }
+    private fun startBlurWork(imageUri: Uri) {
+        val blurRequest = OneTimeWorkRequestBuilder<BlurWorker>()
+            .setInputData(workDataOf(BlurWorker.KEY_IMAGE_URI to imageUri.toString()))
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiresBatteryNotLow(true)
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(blurRequest)
+
+        // Observe work status
+        WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(blurRequest.id)
+            .observe(viewLifecycleOwner) { workInfo ->
+                if (workInfo != null && workInfo.state.isFinished) {
+                    val outputUriString = workInfo.outputData.getString(BlurWorker.KEY_BLURRED_IMAGE_URI)
+                    if (!outputUriString.isNullOrEmpty()) {
+                        val outputUri = Uri.parse(outputUriString)
+                        binding.photoedit.setImageURI(outputUri)
+                        selectedImage = outputUri
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to blur image", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+    }
+
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
@@ -151,6 +186,8 @@ class EditProfileFragment : Fragment() {
                     selectedBitmap = imageBitmap
                     binding.photoedit.setImageBitmap(selectedBitmap)
                     selectedImage = saveImageToInternalStorage(imageBitmap)
+                    // Start Blur Work
+                    selectedImage?.let { startBlurWork(it) }
                 }
                 SELECT_PICTURE -> {
                     selectedImage = data?.data
@@ -167,6 +204,9 @@ class EditProfileFragment : Fragment() {
                                         MediaStore.Images.Media.getBitmap(it.contentResolver, internalUri)
                                     }
                                     binding.photoedit.setImageBitmap(selectedBitmap)
+
+                                    // Start Blur Work
+                                    startBlurWork(internalUri)
                                 }
                             }
                         } catch (e: Exception) {
