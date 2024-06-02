@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 34
     defaultConfig {
         applicationId "com.slf.moviescatalog"
         minSdkVersion 21
@@ -15,13 +15,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    lintOptions {
-        disable 'ObsoleteLintCustomCheck'
-        disable 'TypographyFractions','TypographyQuotes'
-        checkReleaseBuilds false
-
-
-    }
 
     buildTypes {
         release {
@@ -41,10 +34,22 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.slf.moviescatalog'
+    lint {
+        checkReleaseBuilds false
+        disable 'ObsoleteLintCustomCheck', 'TypographyFractions', 'TypographyQuotes'
+    }
 
 }
 
 dependencies {
+    //Module
+//    implementation project(':data')
+    implementation project(':presentation')
+//    implementation project(':utils')
+//    implementation project(':di')
+//    implementation project(':domain')
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Kotlin

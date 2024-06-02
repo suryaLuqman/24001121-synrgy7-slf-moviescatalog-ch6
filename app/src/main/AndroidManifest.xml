@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.slf.moviescatalog">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -15,24 +15,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Challenge5">
+        android:theme="@style/Theme.Challenge5"
+        tools:replace="android:theme">
         <activity
-            android:name="com.slf.moviescatalog.presentation.ui.UserProfileActivity"
+            android:name="com.slf.module.presentation.ui.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name="com.slf.moviescatalog.presentation.ui.LoginActivity"
-            android:exported="true" >
+            android:name="com.slf.module.presentation.ui.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.slf.moviescatalog.presentation.ui.MovieDetailsActivity" />
-        <activity android:name="com.slf.moviescatalog.presentation.ui.MainActivity"
-            android:exported="false" >
-
+        <activity android:name="com.slf.module.presentation.ui.MovieDetailsActivity" />
+        <activity android:name="com.slf.module.presentation.ui.MainActivity"
+            android:exported="false">
         </activity>
     </application>
-
 </manifest>

@@ -1,2 +1,7 @@
 include ':app'
+include ':data'
+include ':di'
+include ':presentation'
+include ':domain'
+include ':utils'
 rootProject.name='moviescatalog'
